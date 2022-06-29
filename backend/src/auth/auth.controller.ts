@@ -7,6 +7,7 @@ import {LoginUserDto} from './dto/login-user-dto';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
   @ApiOperation({ summary: 'User Registration' })
   @ApiBody({
     schema: {
@@ -35,8 +36,10 @@ export class AuthController {
           posts: 'Posts[]',
           comments: 'Comment[]',
         },
-        access_token: 'string',
-        refresh_token: 'string',
+        tokenPair: {
+          access_token: 'string',
+          refresh_token: 'string',
+        }
       },
     },
   })
@@ -55,7 +58,7 @@ export class AuthController {
     },
   })
   @ApiCreatedResponse({
-    status: 201,
+    status: 200,
     schema: {
       example: {
         user: {
@@ -69,8 +72,10 @@ export class AuthController {
           posts: 'Posts[]',
           comments: 'Comment[]',
         },
-        access_token: 'string',
-        refresh_token: 'string',
+        tokenPair: {
+          access_token: 'string',
+          refresh_token: 'string',
+        }
       },
     },
   })
