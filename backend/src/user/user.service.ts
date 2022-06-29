@@ -8,11 +8,15 @@ import { PrismaService } from '../core/prisma.service';
 export class UserService {
   constructor(private prismaService: PrismaService) {}
 
-  async createUser(user: CreateUserDto): Promise<User> {
+  public async createUser(user: CreateUserDto): Promise<User> {
     return this.prismaService.user.create({ data: user });
   }
 
-  async getByEmail(email: string): Promise<User> {
+  public async getAll(): Promise<User[]> {
+    return this.prismaService.user.findMany();
+  }
+
+  public async getByEmail(email: string): Promise<User> {
     return this.prismaService.user.findUnique({ where: { email: email } });
   }
 }

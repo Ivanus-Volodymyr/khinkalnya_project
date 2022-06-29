@@ -1,7 +1,7 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 import {IUser} from "../../interfaces";
-import {authService} from "../../services";
+import {authService, userService} from "../../services";
 
 const initialState = {
     result: [],
@@ -9,26 +9,35 @@ const initialState = {
     response: {}
 }
 export const registrationUser = createAsyncThunk(
-    'registration/user',
-    async (data: IUser) => {
-        let response = await authService.registration(data);
+    'auth/registration',
+    async (data: IUser, {dispatch}) => {
+        const response = await authService.registration(data);
+        dispatch(setToken(response.data))
     }
 )
 
 export const loginUser = createAsyncThunk(
-    'login/user',
-    async (data: IUser, {dispatch, getState}) => {
-        let response = await authService.login(data);
-        dispatch(setToken(response))
+    'auth/login',
+    async (data: Partial<IUser>, {dispatch}) => {
+        const response = await authService.login(data);
+        dispatch(setToken(response.data))
     }
 )
+
+// export const getAll = createAsyncThunk(
+//     'auth/user',
+//     async (accessToken: string) => {
+//     const response = await userService.getAllUsers(accessToken);
+//         console.log(response);
+//     });
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         setToken: (state, action: any) => {
-            state.accessToken=action.payload.data.tokenPair.accessToken;
+            console.log(action.payload);
+            // state.accessToken = action.payload.data.tokenPair.accessToken;
 
         }
     }

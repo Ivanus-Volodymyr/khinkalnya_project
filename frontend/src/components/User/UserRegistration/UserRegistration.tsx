@@ -1,18 +1,19 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {useForm} from "react-hook-form";
+
 import {IUser} from "../../../interfaces";
-import {authService} from "../../../services";
+import {useAppDispatch} from "../../../hooks";
+import {registrationUser} from "../../../store";
 
 const UserRegistration: FC= () => {
-    const {handleSubmit, reset, register} = useForm()
-    const [data, setData] = useState({});
+    const {handleSubmit, reset, register} = useForm();
+    const dispatch = useAppDispatch();
 
     const submit: any = async (data: IUser) => {
-        const response = await authService.registration(data);
-        setData(response);
-        reset()
-    }
-    console.log(data);
+        await dispatch(registrationUser(data));
+        reset();
+    };
+
     return (
         <div>
             <form onSubmit={handleSubmit(submit)}>
