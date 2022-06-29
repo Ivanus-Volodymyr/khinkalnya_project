@@ -5,3 +5,9 @@ export interface IUser {
     city: string;
     password: string;
 }
+
+export interface IUserResponse extends IUser {
+    id: number;
+    status: boolean;
+    avatar: string | null;
+}

@@ -3,19 +3,19 @@ import {useForm} from "react-hook-form";
 
 import {IUser} from "../../../interfaces";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {loginUser} from "../../../store";
-import {authService, userService} from "../../../services";
+import {getAll, loginUser} from "../../../store";
 
 const UserLogin: FC = () => {
-    const {accessToken} = useAppSelector(state => state.authReducer);
+    const {access_token} = useAppSelector(state => state.authReducer);
 
     const dispatch = useAppDispatch();
     const {register, handleSubmit, reset} = useForm();
 
     const submit: any = async (data: Partial<IUser>) => {
-        dispatch(loginUser(data));
-        // reset();
+        await dispatch(loginUser(data));
+        reset();
     }
+    dispatch(getAll(access_token))
 
 
     return (

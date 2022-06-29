@@ -8,7 +8,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  // @UseGuards(AuthorizedGuard)
+  @UseGuards(AuthorizedGuard)
   getAllUsers() {
     return this.userService.getAll();
   }
