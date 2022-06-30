@@ -9,6 +9,7 @@ export class TokenService {
     private prismaService: PrismaService,
     private jwtService: JwtService,
   ) {}
+
   async saveToken(token, id: number): Promise<TokenPair> {
     return this.prismaService.tokenPair.create({
       data: {

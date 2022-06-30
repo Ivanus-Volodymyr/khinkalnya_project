@@ -1,8 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { UserService } from '../user/user.service';
@@ -18,6 +14,7 @@ export class AuthService {
   ) {}
 
   async registration(data: CreateUserDto) {
+
     try {
       const user = await this.userService.getByEmail(data.email);
 
@@ -36,6 +33,7 @@ export class AuthService {
       });
 
       return this.tokenService.generateToken(savedUser);
+
     } catch (e) {
       console.log(e.message);
       return e.message[0];
@@ -43,9 +41,11 @@ export class AuthService {
   }
 
   async login(data: LoginUserDto) {
+
     try {
       const userFromDb = await this._validate(data);
-      if (userFromDb){
+
+      if (userFromDb) {
         await this.tokenService.deleteTokenPair(userFromDb.id);
         return this.tokenService.generateToken(userFromDb);
       }
@@ -55,7 +55,8 @@ export class AuthService {
     }
   }
 
-  private async _validate(data: LoginUserDto){
+  private async _validate(data: LoginUserDto) {
+
     try {
       const userFromDb = await this.userService.getByEmail(data.email);
       const checkPassword = await bcrypt.compare(
