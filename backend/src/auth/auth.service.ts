@@ -14,7 +14,6 @@ export class AuthService {
   ) {}
 
   async registration(data: CreateUserDto) {
-
     try {
       const user = await this.userService.getByEmail(data.email);
 
@@ -33,7 +32,6 @@ export class AuthService {
       });
 
       return this.tokenService.generateToken(savedUser);
-
     } catch (e) {
       console.log(e.message);
       return e.message[0];
@@ -41,7 +39,6 @@ export class AuthService {
   }
 
   async login(data: LoginUserDto) {
-
     try {
       const userFromDb = await this._validate(data);
 
@@ -49,14 +46,12 @@ export class AuthService {
         await this.tokenService.deleteTokenPair(userFromDb.id);
         return this.tokenService.generateToken(userFromDb);
       }
-
     } catch (e) {
       console.log(e);
     }
   }
 
   private async _validate(data: LoginUserDto) {
-
     try {
       const userFromDb = await this.userService.getByEmail(data.email);
       const checkPassword = await bcrypt.compare(
@@ -67,7 +62,6 @@ export class AuthService {
       if (userFromDb && checkPassword) {
         return userFromDb;
       }
-
     } catch (e) {
       console.log(e);
     }

@@ -2,12 +2,11 @@ import React, {FC} from 'react';
 import {useForm} from "react-hook-form";
 
 import {IUser} from "../../../interfaces";
-import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {getAll, loginUser} from "../../../store";
+import {useAppDispatch} from "../../../hooks";
+import {loginUser} from "../../../store";
+import {Link} from "react-router-dom";
 
 const UserLogin: FC = () => {
-    const {access_token} = useAppSelector(state => state.authReducer);
-
     const dispatch = useAppDispatch();
     const {register, handleSubmit, reset} = useForm();
 
@@ -15,7 +14,6 @@ const UserLogin: FC = () => {
         await dispatch(loginUser(data));
         reset();
     }
-    dispatch(getAll(access_token))
 
 
     return (
@@ -26,7 +24,9 @@ const UserLogin: FC = () => {
                     <div><input type="text" placeholder={'password'}{...register('password')}/></div>
                 </div>
                 <div>
-                    <button>Login</button>
+                    <Link to={'/users'}>
+                        <button>Login</button>
+                    </Link>
                 </div>
             </form>
         </div>

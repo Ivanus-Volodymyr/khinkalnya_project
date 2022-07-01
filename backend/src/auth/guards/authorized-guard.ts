@@ -15,10 +15,12 @@ export class AuthorizedGuard implements CanActivate {
     try {
       const authHeader = request.headers.authorization;
 
+      console.log(authHeader);
+
       const bearer = authHeader.split(' ')[0];
       const accessToken = authHeader.split(' ')[1];
 
-      if (bearer !== 'Bearer' || !accessToken) {
+      if (bearer !== 'Bearer' || !accessToken || accessToken=='') {
         throw new UnauthorizedException(
           HttpStatus.UNAUTHORIZED,
           'UNAUTHORIZED',

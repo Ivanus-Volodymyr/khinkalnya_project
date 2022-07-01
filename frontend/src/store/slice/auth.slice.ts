@@ -5,6 +5,7 @@ import {authService, userService} from "../../services";
 
 const initialState = {
     access_token: '',
+    users: [],
 }
 export const registrationUser = createAsyncThunk(
     'auth/registration',
@@ -24,9 +25,11 @@ export const loginUser = createAsyncThunk(
 
 export const getAll = createAsyncThunk(
     'auth/user',
-    async (accessToken: string) => {
-        const response = await userService.getAllUsers(accessToken);
-        console.log(response);
+    async (_, {dispatch, getState}) => {
+        const state = getState() as { access_token: string }
+
+        const response = await userService.getAllUsers('andrew milovich');
+        dispatch(setUsers(response.data))
     });
 
 const authSlice = createSlice({
@@ -35,6 +38,10 @@ const authSlice = createSlice({
     reducers: {
         setToken: (state, action: any) => {
             state.access_token = action.payload.tokenPair.access_token;
+        },
+        setUsers: (state, action: any) => {
+            console.log(action.payload);
+            // state.users = action.payload
         }
     }
 });
@@ -43,5 +50,6 @@ const authReducer = authSlice.reducer;
 export default authReducer;
 
 export const {
-    setToken
+    setToken,
+    setUsers,
 } = authSlice.actions

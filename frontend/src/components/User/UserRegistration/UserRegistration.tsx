@@ -21,6 +21,7 @@ const UserRegistration: FC= () => {
                     <div><input type="text" placeholder={'name'}{...register('name')}/></div>
                     <div><input type="text" placeholder={'email'}{...register('email')}/></div>
                     <div><input type="number" placeholder={'age'}{...register('age')}/></div>
+                    <div><input type="number" placeholder={'phone'}{...register('phone')}/></div>
                     <div><input type="text" placeholder={'city'}{...register('city')}/></div>
                     <div><input type="text" placeholder={'password'}{...register('password')}/></div>
                     <div><button >Registration</button></div>
