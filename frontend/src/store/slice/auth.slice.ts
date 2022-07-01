@@ -4,9 +4,7 @@ import {IUser} from "../../interfaces";
 import {authService, userService} from "../../services";
 
 const initialState = {
-    result: [],
     access_token: '',
-    response: {}
 }
 export const registrationUser = createAsyncThunk(
     'auth/registration',

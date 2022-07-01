@@ -16,7 +16,15 @@ export class UserService {
     return this.prismaService.user.findMany();
   }
 
+  public async getUserById(id : number): Promise<User> {
+    return this.prismaService.user.findUnique({ where: { id : id}})
+  }
+
   public async getByEmail(email: string): Promise<User> {
     return this.prismaService.user.findUnique({ where: { email: email } });
+  }
+
+  public async deleteUserById(id: number): Promise<User> {
+    return this.prismaService.user.delete({where: {id: id}})
   }
 }
