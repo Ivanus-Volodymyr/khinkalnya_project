@@ -40,7 +40,9 @@ const authSlice = createSlice({
             state.access_token = action.payload.tokenPair.access_token;
         },
         setUsers: (state, action: any) => {
+            console.log('-----------------');
             console.log(action.payload);
+            console.log('-----------------');
             // state.users = action.payload
         }
     }
