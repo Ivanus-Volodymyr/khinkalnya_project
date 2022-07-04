@@ -9,11 +9,10 @@ const Users = () => {
         dispatch(getAll())
     },[])
 
-    const {users} = useAppSelector(state => state.authReducer);
+    const {user} = useAppSelector(state => state.authReducer);
 
     return (
         <div>
-            {users}
         </div>
     );
 };

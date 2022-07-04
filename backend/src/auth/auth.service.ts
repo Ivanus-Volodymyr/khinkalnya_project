@@ -53,6 +53,7 @@ export class AuthService {
 
   private async _validate(data: LoginUserDto) {
     try {
+      console.log(data);
       const userFromDb = await this.userService.getByEmail(data.email);
       const checkPassword = await bcrypt.compare(
         data.password,
@@ -63,7 +64,7 @@ export class AuthService {
         return userFromDb;
       }
     } catch (e) {
-      console.log(e);
+      console.log('wrong');
     }
   }
 }

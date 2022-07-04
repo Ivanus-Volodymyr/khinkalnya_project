@@ -5,5 +5,5 @@ export default apiUrl;
 export const urls = {
     registration: '/auth/registration',
     login:'auth/login',
-    getUsers: '/user',
+    getUsers: '/users',
 }

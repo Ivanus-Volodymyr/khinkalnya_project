@@ -1,9 +1,12 @@
 import React from 'react';
 
 import './Header.css'
+import {useAppSelector} from "../../hooks";
 
 
 const Header = () => {
+    const {user} = useAppSelector(state => state.authReducer);
+
     return (
         <div>
             <div className={'header_menu'}>
@@ -50,7 +53,7 @@ const Header = () => {
                     <img src="/image-for-header/cart.png" width={'80px'} height={'50px'} alt="cart"/>
                 </div>
                 <div>
-                    <a href="/auth/login"> Увійти</a>
+                    {user === null ? <a href="/auth/login"> Увійти</a>: <a href="/auth/logout"> Вийти</a>}
                 </div>
             </div>
             <hr/>

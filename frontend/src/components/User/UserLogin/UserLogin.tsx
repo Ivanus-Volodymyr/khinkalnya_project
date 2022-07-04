@@ -2,13 +2,14 @@ import React, {FC} from 'react';
 import {useForm} from "react-hook-form";
 
 import {IUser} from "../../../interfaces";
-import {useAppDispatch} from "../../../hooks";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {loginUser} from "../../../store";
-import {Link} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 const UserLogin: FC = () => {
+    const {active} = useAppSelector(state => state.authReducer);
     const dispatch = useAppDispatch();
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset,} = useForm();
 
     const submit: any = async (data: Partial<IUser>) => {
         await dispatch(loginUser(data));
@@ -24,9 +25,8 @@ const UserLogin: FC = () => {
                     <div><input type="text" placeholder={'password'}{...register('password')}/></div>
                 </div>
                 <div>
-                    <Link to={'/users'}>
-                        <button>Login</button>
-                    </Link>
+                    {active ? <Navigate to={'/users'}/> : <div>Please, enter email and password</div>}
+                    <button>Login</button>
                 </div>
             </form>
         </div>
