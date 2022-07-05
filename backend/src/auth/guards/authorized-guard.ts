@@ -1,29 +1,26 @@
 import {CanActivate, ExecutionContext, HttpStatus, UnauthorizedException,} from '@nestjs/common';
-import {Observable} from 'rxjs';
-import {TokenService} from "../token/token.service";
-import {TokenPair} from "@prisma/client";
+import {Observable} from "rxjs";
 
 export class AuthorizedGuard implements CanActivate {
-    constructor(private tokenService: TokenService) {
-    }
 
-    async canActivate(
+    canActivate(
         context: ExecutionContext,
-    ): Promise<boolean> {
+    ):  boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest();
         try {
-            console.log(request.headers);
             const authHeader = request.headers.authorization;
-            const userId = request.headers.userid;
+            const userId = Number(request.headers.userid);
 
             const bearer = authHeader.split(' ')[0];
             const accessToken = authHeader.split(' ')[1];
 
-            const token = await this._validateToken(userId);
-            console.log(token);
-
-
-            if (bearer !== 'Bearer' || accessToken === 'undefined') {
+            // console.log(authHeader);
+            // console.log(userId);
+            //
+            // const tokenPairByUserId =  this.tokenService.getTokenPairByUserId(1);
+            // console.log(tokenPairByUserId);
+            //
+            if (bearer !== 'Bearer' || accessToken === 'undefined' || !accessToken) {
                 throw new UnauthorizedException(
                     HttpStatus.UNAUTHORIZED,
                     'UNAUTHORIZED',
@@ -34,9 +31,5 @@ export class AuthorizedGuard implements CanActivate {
         } catch (e) {
             console.log(e);
         }
-    }
-
-    private async _validateToken(id: string) {
-       return this.tokenService.getTokenPairByUserId(id);
     }
 }

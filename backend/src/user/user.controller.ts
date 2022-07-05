@@ -1,7 +1,11 @@
 import {Controller, Get, Req, UseGuards} from '@nestjs/common';
 
+
 import { UserService } from './user.service';
 import { AuthorizedGuard } from '../auth/guards/authorized-guard';
+import {TokenService} from "../auth/token/token.service";
+import {JwtService} from "@nestjs/jwt";
+import {VerifyTokenGuard} from "../auth/guards/verify-token-guard";
 
 @Controller('users')
 export class UserController {
@@ -9,7 +13,8 @@ export class UserController {
 
   @Get()
   @UseGuards(AuthorizedGuard)
-  getAllUsers() {
+  @UseGuards(VerifyTokenGuard)
+  getAllUsers(@Req() request) {
     return this.userService.getAll();
   }
 }
