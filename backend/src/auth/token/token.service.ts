@@ -47,18 +47,29 @@ export class TokenService {
   }
 
   async getTokenPairByUserId(id: number): Promise<TokenPair> {
-    return this.prismaService.tokenPair.findUnique({ where: { authorId: id } });
+    try {
+      if (!id){
+        throw new Error('invalid id ...')
+      }
+      return this.prismaService.tokenPair.findUnique({ where: { authorId: id } });
+    } catch (e) {
+      return e.message
+    }
   }
 
   public verifyToken(token, tokenType = 'ACCESS') {
-    let secret = 'ACCESS';
+    try {
+      let secret = 'ACCESS';
 
-    if (tokenType === 'REFRESH') {
-      secret = 'REFRESH';
+      if (tokenType === 'REFRESH') {
+        secret = 'REFRESH';
+      }
+      if (tokenType === 'ACTION') {
+        secret = 'ACTION';
+      }
+      return this.jwtService.verify(token, { secret: secret });
+    } catch (e) {
+      return e.message;
     }
-    if (tokenType === 'ACTION') {
-      secret = 'ACTION';
-    }
-    return this.jwtService.verify(token, { secret: secret });
   }
 }

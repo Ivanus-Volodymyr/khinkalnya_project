@@ -28,10 +28,11 @@ export const loginUser = createAsyncThunk(
 
 export const getAll = createAsyncThunk(
     'auth/user',
-    async (_, {dispatch, getState}) => {
+    async (_) => {
         const access_token = localStorage.getItem('access_token') as string;
-        const response = await userService.getAllUsers(access_token);
-        dispatch(setUsers(response.data))
+        const response = await userService.getAllUsers('jcndjncjkndjn');
+        console.log(response);
+        // dispatch(setUsers(response.data))
     });
 
 const authSlice = createSlice({

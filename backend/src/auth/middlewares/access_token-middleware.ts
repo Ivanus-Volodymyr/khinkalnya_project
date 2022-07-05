@@ -3,7 +3,7 @@ import {NextFunction, Request, Response} from 'express';
 import {TokenService} from "../token/token.service";
 
 @Injectable()
-export class LoggerMiddleware implements NestMiddleware {
+export class AccessTokenMiddleware implements NestMiddleware {
     constructor(private tokenService: TokenService) {
     }
     async use(req: Request, res: Response, next: NextFunction) {
@@ -21,11 +21,14 @@ export class LoggerMiddleware implements NestMiddleware {
 
             const tokenPayload = await this.tokenService.verifyToken(access_token, 'ACCESS');
             const tokenPairFromDb = await this.tokenService.getTokenPairByUserId(tokenPayload.id);
-            console.log(tokenPayload);
-            console.log(tokenPairFromDb);
+
+            if (access_token !== tokenPairFromDb.access_token || !tokenPayload) {
+                next(new UnauthorizedException(HttpStatus.FORBIDDEN,
+                    'invalid token from frontend',))
+            }
             next();
         } catch (e) {
-            console.log(e);
+            next(e.message)
         }
 
     }
