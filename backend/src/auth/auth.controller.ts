@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {Body, Controller, HttpCode, HttpStatus, Post, Req} from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/registration-user-dto';
 import { AuthService } from './auth.service';
@@ -48,6 +48,7 @@ export class AuthController {
   registration(@Body() user: CreateUserDto) {
     return this.authService.registration(user);
   }
+
   @ApiOperation({ summary: 'User Login' })
   @ApiBody({
     schema: {
@@ -84,4 +85,18 @@ export class AuthController {
   login(@Body() loginData: LoginUserDto) {
     return this.authService.login(loginData);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('refresh')
+  refresh(@Req() request) {
+    const header = request.rawHeaders[1];
+    const refreshToken = header.split(' ')[1];
+    return this.authService.refresh(refreshToken);
+  }
+
+  // @HttpCode(HttpStatus.OK)
+  // @Post('logout')
+  // logout() {
+  //
+  // }
 }

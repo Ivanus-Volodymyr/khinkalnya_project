@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from './dto/registration-user-dto';
@@ -11,6 +12,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private tokenService: TokenService,
+    private jwtService: JwtService,
   ) {}
 
   async registration(data: CreateUserDto) {
@@ -53,7 +55,6 @@ export class AuthService {
 
   private async _validate(data: LoginUserDto) {
     try {
-      console.log(data);
       const userFromDb = await this.userService.getByEmail(data.email);
       const checkPassword = await bcrypt.compare(
         data.password,
@@ -65,6 +66,28 @@ export class AuthService {
       }
     } catch (e) {
       console.log('wrong');
+    }
+  }
+
+  async refresh(refreshToken: string) {
+    try {
+      const tokenPayload = await this.tokenService.verifyToken(refreshToken, 'REFRESH');
+      const tokenPairByUserId = await this.tokenService.getTokenPairByUserId(tokenPayload.id);
+      console.log(tokenPairByUserId);
+
+      if (!tokenPayload || refreshToken !== tokenPairByUserId.refresh_token) {
+        return new HttpException(
+            'token not valid',
+            HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      await this.tokenService.deleteTokenPair(tokenPayload.id);
+
+      return this.tokenService.generateToken(tokenPayload);
+
+    } catch (e) {
+      console.log(e);
     }
   }
 }

@@ -29,11 +29,8 @@ export const loginUser = createAsyncThunk(
 export const getAll = createAsyncThunk(
     'auth/user',
     async (_, {dispatch, getState}) => {
-        const state = getState() as {authReducer: IInitialState}
-        const tokenPair = state.authReducer.tokenPair;
-        console.log(tokenPair);
-
-        const response = await userService.getAllUsers(tokenPair.access_token, tokenPair.authorId);
+        const access_token = localStorage.getItem('access_token') as string;
+        const response = await userService.getAllUsers(access_token);
         dispatch(setUsers(response.data))
     });
 
@@ -43,6 +40,8 @@ const authSlice = createSlice({
     reducers: {
         setToken: (state, action: any) => {
             state.access_token = action.payload.tokenPair.access_token;
+            localStorage.setItem('access_token', action.payload.tokenPair.access_token);
+            localStorage.setItem('refresh_token', action.payload.tokenPair.refresh_token);
             state.active = true;
             state.user = action.payload.user;
             state.tokenPair = action.payload.tokenPair as ITokenPair;

@@ -30,7 +30,7 @@ export class TokenService {
       }),
       this.jwtService.signAsync(payload, {
         secret: 'REFRESH',
-        expiresIn: '7d',
+        expiresIn: '20d',
       }),
     ]);
 
@@ -48,5 +48,17 @@ export class TokenService {
 
   async getTokenPairByUserId(id: number): Promise<TokenPair> {
     return this.prismaService.tokenPair.findUnique({ where: { authorId: id } });
+  }
+
+  public verifyToken(token, tokenType = 'ACCESS') {
+    let secret = 'ACCESS';
+
+    if (tokenType === 'REFRESH') {
+      secret = 'REFRESH';
+    }
+    if (tokenType === 'ACTION') {
+      secret = 'ACTION';
+    }
+    return this.jwtService.verify(token, { secret: secret });
   }
 }
