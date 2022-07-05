@@ -1,4 +1,11 @@
-import {Body, Controller, HttpCode, HttpStatus, Post, Req} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/registration-user-dto';
 import { AuthService } from './auth.service';
@@ -94,9 +101,11 @@ export class AuthController {
     return this.authService.refresh(refreshToken);
   }
 
-  // @HttpCode(HttpStatus.OK)
-  // @Post('logout')
-  // logout() {
-  //
-  // }
+  @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  logout(@Req() request) {
+    const header = request.rawHeaders[1];
+    const accessToken = header.split(' ')[1];
+    return this.authService.logout(accessToken);
+  }
 }

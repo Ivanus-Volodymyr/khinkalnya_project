@@ -1,6 +1,5 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable, UnauthorizedException} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
 
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from './dto/registration-user-dto';
@@ -12,7 +11,6 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private tokenService: TokenService,
-    private jwtService: JwtService,
   ) {}
 
   async registration(data: CreateUserDto) {
@@ -45,7 +43,12 @@ export class AuthService {
       const userFromDb = await this._validate(data);
 
       if (userFromDb) {
-        await this.tokenService.deleteTokenPair(userFromDb.id);
+        const tokenPairFromDb = await this.tokenService.getTokenPairByUserId(userFromDb.id);
+
+       if (tokenPairFromDb){
+         await this.tokenService.deleteTokenPair(userFromDb.id);
+       }
+
         return this.tokenService.generateToken(userFromDb);
       }
     } catch (e) {
@@ -71,23 +74,38 @@ export class AuthService {
 
   async refresh(refreshToken: string) {
     try {
-      const tokenPayload = await this.tokenService.verifyToken(refreshToken, 'REFRESH');
-      const tokenPairByUserId = await this.tokenService.getTokenPairByUserId(tokenPayload.id);
+      const tokenPayload = await this.tokenService.verifyToken(
+        refreshToken,
+        'REFRESH',
+      );
+      const tokenPairByUserId = await this.tokenService.getTokenPairByUserId(
+        tokenPayload.id,
+      );
       console.log(tokenPairByUserId);
 
       if (!tokenPayload || refreshToken !== tokenPairByUserId.refresh_token) {
-        return new HttpException(
-            'token not valid',
-            HttpStatus.BAD_REQUEST,
-        );
+        return new HttpException('token not valid', HttpStatus.BAD_REQUEST);
       }
 
       await this.tokenService.deleteTokenPair(tokenPayload.id);
 
       return this.tokenService.generateToken(tokenPayload);
-
     } catch (e) {
       console.log(e);
     }
   }
+
+    async logout(accessToken: string) {
+        try {
+          const tokenPayload = await this.tokenService.verifyToken(accessToken, 'ACCESS');
+
+          if (!tokenPayload) {
+            throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, 'access token not valid')
+          }
+
+          return this.tokenService.deleteTokenPair(tokenPayload.id);
+        } catch (e) {
+          console.log(e);
+        }
+    }
 }

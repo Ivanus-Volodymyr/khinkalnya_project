@@ -48,12 +48,14 @@ export class TokenService {
 
   async getTokenPairByUserId(id: number): Promise<TokenPair> {
     try {
-      if (!id){
-        throw new Error('invalid id ...')
+      if (!id) {
+        throw new Error('invalid id ...');
       }
-      return this.prismaService.tokenPair.findUnique({ where: { authorId: id } });
+      return this.prismaService.tokenPair.findUnique({
+        where: { authorId: id },
+      });
     } catch (e) {
-      return e.message
+      return e.message;
     }
   }
 

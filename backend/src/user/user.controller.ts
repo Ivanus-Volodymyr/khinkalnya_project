@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { AuthorizedGuard } from '../auth/guards/authorized-guard';
@@ -9,7 +9,7 @@ export class UserController {
 
   @Get()
   @UseGuards(AuthorizedGuard)
-  getAllUsers(@Req() request) {
+  getAllUsers() {
     return this.userService.getAll();
   }
 }
