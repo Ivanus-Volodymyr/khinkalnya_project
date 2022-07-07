@@ -10,6 +10,7 @@ const initialState: IInitialState = {
     active: false,
     user: null,
     tokenPair: {} as ITokenPair,
+    refresh_token: '',
 }
 export const registrationUser = createAsyncThunk(
     'auth/registration',
@@ -27,14 +28,10 @@ export const loginUser = createAsyncThunk(
     }
 )
 export const logoutUser = createAsyncThunk(
-    'auth/login',
-    async () => {
+    'auth/logout',
+    async (_, {dispatch}) => {
         const response = await authService.logout();
-        localStorage.clear()
-        console.log('logout response=============');
-        console.log(response);
-        console.log('logout response=============');
-        // dispatch(setToken(response.data))
+        dispatch(clearLocalStorage(response))
     }
 )
 
@@ -53,10 +50,16 @@ const authSlice = createSlice({
             const access_token = action.payload.tokenPair.access_token
             const {role} = decodeToken(access_token) as string | any;
             localStorage.setItem('role', role);
-            state.access_token = access_token;
+
+            state.access_token = action.payload.tokenPair.access_token;
+            state.refresh_token = action.payload.tokenPair.refresh_token;
+
             localStorage.setItem('access_token', action.payload.tokenPair.access_token);
             localStorage.setItem('refresh_token', action.payload.tokenPair.refresh_token);
             state.active = true;
+
+            window.dispatchEvent(new Event("storage"));
+
             state.user = action.payload.user;
             state.tokenPair = action.payload.tokenPair as ITokenPair;
         },
@@ -65,6 +68,12 @@ const authSlice = createSlice({
             console.log(action.payload);
             console.log('-----------------');
             // state.users = action.payload
+        },
+        clearLocalStorage: (state, action) => {
+            console.log(action.payload);
+            state.refresh_token = '';
+            localStorage.clear()
+            window.dispatchEvent(new Event("storage"));
         }
     }
 });
@@ -75,4 +84,5 @@ export default authReducer;
 export const {
     setToken,
     setUsers,
+    clearLocalStorage,
 } = authSlice.actions

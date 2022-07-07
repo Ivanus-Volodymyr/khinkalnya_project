@@ -1,16 +1,17 @@
-import React from 'react';
-import {isExpired} from "react-jwt";
+import React, {useEffect} from 'react';
 
 import './Header.css'
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {logoutUser} from "../../store";
 
 const Header = () => {
-    const {user} = useAppSelector(state => state.authReducer);
+    // const {user, refresh_token} = useAppSelector(state => state.authReducer);
     const dispatch = useAppDispatch();
+    let profile = false;
 
-    const refresh_token = localStorage.getItem('refresh_token');
-    const item = isExpired(refresh_token as string);
+    window.addEventListener('storage', () => {
+        console.log("change to local storage!");
+    })
 
     const logout: any = () => {
         dispatch(logoutUser())
@@ -62,7 +63,7 @@ const Header = () => {
                     <img src="/image-for-header/cart.png" width={'80px'} height={'50px'} alt="cart"/>
                 </div>
                 <div>
-                    {item ? <a href="/auth/login"> Увійти</a> : <button onClick={logout}>Вийти</button>}
+                    {profile ? <a href="/auth/login"> Увійти</a> : <button onClick={logout}>Вийти</button>}
                 </div>
             </div>
             <hr/>
@@ -71,3 +72,4 @@ const Header = () => {
 };
 
 export default Header;
+

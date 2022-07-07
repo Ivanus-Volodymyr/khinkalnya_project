@@ -5,4 +5,5 @@ export interface IInitialState {
     active: boolean,
     user: null,
     tokenPair: ITokenPair,
+    refresh_token: string;
 }
