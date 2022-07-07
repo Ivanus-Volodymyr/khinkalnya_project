@@ -3,6 +3,7 @@
 /node_modules
 /prisma/.env
 .env
+.gitignore
 
 # Logs
 logs
