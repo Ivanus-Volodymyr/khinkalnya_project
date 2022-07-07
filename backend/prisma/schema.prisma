@@ -16,6 +16,7 @@ model User {
   name         String
   age          Int?
   city         String?
+  role         String?     @default("user")
   password     String
   phone        String?
   avatar       String?
@@ -88,8 +89,8 @@ model TokenPair {
   id            Int    @id @default(autoincrement())
   access_token  String
   refresh_token String
-  author        User?  @relation(fields: [authorId], references: [id])
-  authorId      Int?   @unique
+  author        User   @relation(fields: [authorId], references: [id])
+  authorId      Int    @unique
 }
 
 // npx prisma format  // check

@@ -81,8 +81,6 @@ export class AuthService {
       const tokenPairByUserId = await this.tokenService.getTokenPairByUserId(
         tokenPayload.id,
       );
-      console.log(tokenPairByUserId);
-
       if (!tokenPayload || refreshToken !== tokenPairByUserId.refresh_token) {
         return new HttpException('token not valid', HttpStatus.BAD_REQUEST);
       }
@@ -98,6 +96,7 @@ export class AuthService {
     async logout(accessToken: string) {
         try {
           const tokenPayload = await this.tokenService.verifyToken(accessToken, 'ACCESS');
+          console.log(tokenPayload);
 
           if (!tokenPayload) {
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, 'access token not valid')

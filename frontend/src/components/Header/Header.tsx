@@ -1,11 +1,20 @@
 import React from 'react';
+import {isExpired} from "react-jwt";
 
 import './Header.css'
-import {useAppSelector} from "../../hooks";
-
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {logoutUser} from "../../store";
 
 const Header = () => {
     const {user} = useAppSelector(state => state.authReducer);
+    const dispatch = useAppDispatch();
+
+    const refresh_token = localStorage.getItem('refresh_token');
+    const item = isExpired(refresh_token as string);
+
+    const logout: any = () => {
+        dispatch(logoutUser())
+    }
 
     return (
         <div>
@@ -53,7 +62,7 @@ const Header = () => {
                     <img src="/image-for-header/cart.png" width={'80px'} height={'50px'} alt="cart"/>
                 </div>
                 <div>
-                    {user === null ? <a href="/auth/login"> Увійти</a>: <a href="/auth/logout"> Вийти</a>}
+                    {item ? <a href="/auth/login"> Увійти</a> : <button onClick={logout}>Вийти</button>}
                 </div>
             </div>
             <hr/>

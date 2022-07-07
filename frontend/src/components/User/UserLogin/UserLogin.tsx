@@ -16,6 +16,8 @@ const UserLogin: FC = () => {
         reset();
     }
 
+    const role = localStorage.getItem('role');
+
 
     return (
         <div>
@@ -25,7 +27,8 @@ const UserLogin: FC = () => {
                     <div><input type="text" placeholder={'password'}{...register('password')}/></div>
                 </div>
                 <div>
-                    {active ? <Navigate to={'/users'}/> : <div>Please, enter email and password</div>}
+                    {/*{active ? <Navigate to={'/users'}/> : <div>Please, enter email and password</div>}*/}
+                    {role ==='admin' && <Navigate to={'/users'}/>}
                     <button>Login</button>
                 </div>
             </form>

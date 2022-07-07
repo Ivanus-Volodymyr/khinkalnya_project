@@ -14,7 +14,6 @@ export class AccessTokenMiddleware implements NestMiddleware {
     try {
       const bearer = req.headers.authorization.split(' ')[0];
       const access_token = req.headers.authorization.split(' ')[1];
-      console.log(access_token);
 
       if (!bearer || !access_token) {
         throw new UnauthorizedException(

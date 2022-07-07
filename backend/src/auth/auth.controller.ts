@@ -95,17 +95,14 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('refresh')
-  refresh(@Req() request) {
-    const header = request.rawHeaders[1];
-    const refreshToken = header.split(' ')[1];
-    return this.authService.refresh(refreshToken);
+  refresh(@Req() request, @Body() body) {
+    return this.authService.refresh(body.data);
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('logout')
   logout(@Req() request) {
-    const header = request.rawHeaders[1];
-    const accessToken = header.split(' ')[1];
+    const accessToken = request.headers.authorization.split(' ')[1];
     return this.authService.logout(accessToken);
   }
 }

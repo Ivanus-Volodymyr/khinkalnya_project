@@ -1,10 +1,11 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {decodeToken} from "react-jwt";
 
 import {ITokenPair, IUser} from "../../interfaces";
 import {authService, userService} from "../../services";
 import {IInitialState} from "../../interfaces/initial.state.interface";
 
-const initialState : IInitialState= {
+const initialState: IInitialState = {
     access_token: '',
     active: false,
     user: null,
@@ -25,14 +26,23 @@ export const loginUser = createAsyncThunk(
         dispatch(setToken(response.data))
     }
 )
+export const logoutUser = createAsyncThunk(
+    'auth/login',
+    async () => {
+        const response = await authService.logout();
+        localStorage.clear()
+        console.log('logout response=============');
+        console.log(response);
+        console.log('logout response=============');
+        // dispatch(setToken(response.data))
+    }
+)
 
 export const getAll = createAsyncThunk(
     'auth/user',
-    async (_) => {
-        const access_token = localStorage.getItem('access_token') as string;
-        const response = await userService.getAllUsers('jcndjncjkndjn');
-        console.log(response);
-        // dispatch(setUsers(response.data))
+    async (_, {dispatch}) => {
+        const response = await userService.getAllUsers();
+        dispatch(setUsers(response.data))
     });
 
 const authSlice = createSlice({
@@ -40,7 +50,10 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setToken: (state, action: any) => {
-            state.access_token = action.payload.tokenPair.access_token;
+            const access_token = action.payload.tokenPair.access_token
+            const {role} = decodeToken(access_token) as string | any;
+            localStorage.setItem('role', role);
+            state.access_token = access_token;
             localStorage.setItem('access_token', action.payload.tokenPair.access_token);
             localStorage.setItem('refresh_token', action.payload.tokenPair.refresh_token);
             state.active = true;

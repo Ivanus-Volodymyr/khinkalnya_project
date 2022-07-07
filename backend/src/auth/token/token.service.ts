@@ -21,12 +21,12 @@ export class TokenService {
   }
 
   async generateToken(user: User) {
-    const payload = { email: user.email, id: user.id };
+    const payload = { email: user.email, id: user.id, role: user.role };
 
     const [access, refresh] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: 'ACCESS',
-        expiresIn: '1d',
+        expiresIn: '5m',
       }),
       this.jwtService.signAsync(payload, {
         secret: 'REFRESH',
@@ -42,7 +42,7 @@ export class TokenService {
     };
   }
 
-  async deleteTokenPair(id: number) {
+  async deleteTokenPair(id: number):Promise<TokenPair> {
     return this.prismaService.tokenPair.delete({ where: { authorId: id } });
   }
 

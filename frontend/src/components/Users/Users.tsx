@@ -1,15 +1,12 @@
-import React, {useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from "../../hooks";
-import {getAll} from "../../store";
+import React from 'react';
+import {userService} from "../../services";
 
 const Users = () => {
 
-    const dispatch = useAppDispatch();
-    useEffect(()=> {
-        dispatch(getAll())
-    },[])
 
-    const {user} = useAppSelector(state => state.authReducer);
+    const users = userService.getAllUsers();
+    console.log(users);
+
 
     return (
         <div>
