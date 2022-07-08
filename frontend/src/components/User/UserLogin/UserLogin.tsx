@@ -4,19 +4,29 @@ import {useForm} from "react-hook-form";
 import {IUser} from "../../../interfaces";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {loginUser} from "../../../store";
-import {Navigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const UserLogin: FC = () => {
     const {active} = useAppSelector(state => state.authReducer);
     const dispatch = useAppDispatch();
     const {register, handleSubmit, reset,} = useForm();
+    const navigate = useNavigate();
+
+    const checkRole: any = async () => {
+        let roleFromStorage = await localStorage.getItem('role');
+        if (roleFromStorage === 'user') {
+            navigate('/users');
+        }
+        if (roleFromStorage === 'admin') {
+            navigate('/admin');
+        }
+    }
 
     const submit: any = async (data: Partial<IUser>) => {
         await dispatch(loginUser(data));
+        await checkRole();
         reset();
     }
-
-    const role = localStorage.getItem('role');
 
 
     return (
@@ -27,8 +37,6 @@ const UserLogin: FC = () => {
                     <div><input type="text" placeholder={'password'}{...register('password')}/></div>
                 </div>
                 <div>
-                    {/*{active ? <Navigate to={'/users'}/> : <div>Please, enter email and password</div>}*/}
-                    {role ==='admin' && <Navigate to={'/users'}/>}
                     <button>Login</button>
                 </div>
             </form>

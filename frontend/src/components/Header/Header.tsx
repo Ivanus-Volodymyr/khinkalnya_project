@@ -5,16 +5,16 @@ import {useAppDispatch, useAppSelector} from "../../hooks";
 import {logoutUser} from "../../store";
 
 const Header = () => {
-    // const {user, refresh_token} = useAppSelector(state => state.authReducer);
+    const refresh = localStorage.getItem('refresh_token');
+    const {active} = useAppSelector(state => state.authReducer);
+
+    useEffect(() => {
+        }
+        , [refresh])
+
     const dispatch = useAppDispatch();
-    let profile = false;
-
-    window.addEventListener('storage', () => {
-        console.log("change to local storage!");
-    })
-
-    const logout: any = () => {
-        dispatch(logoutUser())
+    const logout: any = async () => {
+        dispatch(await logoutUser())
     }
 
     return (
@@ -62,8 +62,13 @@ const Header = () => {
                 <div>
                     <img src="/image-for-header/cart.png" width={'80px'} height={'50px'} alt="cart"/>
                 </div>
+                {/*<div>*/}
+                {/*    {profile === '' ? <a href="/auth/login"> Увійти</a> : <button onClick={logout}>Вийти</button>}*/}
+                {/*</div>*/}
+
                 <div>
-                    {profile ? <a href="/auth/login"> Увійти</a> : <button onClick={logout}>Вийти</button>}
+                    <div>{refresh ? <button onClick={logout}><a href='/auth/login'>Вийти</a></button> :
+                        <div><a href='/auth/login'>Увійти</a></div>} </div>
                 </div>
             </div>
             <hr/>

@@ -30,8 +30,9 @@ export const loginUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
     'auth/logout',
     async (_, {dispatch}) => {
-        const response = await authService.logout();
-        dispatch(clearLocalStorage(response))
+        await authService.logout();
+        return localStorage.clear()
+        // dispatch(clearLocalStorage(response))
     }
 )
 
@@ -56,6 +57,7 @@ const authSlice = createSlice({
 
             localStorage.setItem('access_token', action.payload.tokenPair.access_token);
             localStorage.setItem('refresh_token', action.payload.tokenPair.refresh_token);
+
             state.active = true;
 
             window.dispatchEvent(new Event("storage"));
@@ -69,12 +71,7 @@ const authSlice = createSlice({
             console.log('-----------------');
             // state.users = action.payload
         },
-        clearLocalStorage: (state, action) => {
-            console.log(action.payload);
-            state.refresh_token = '';
-            localStorage.clear()
-            window.dispatchEvent(new Event("storage"));
-        }
+       
     }
 });
 
@@ -84,5 +81,4 @@ export default authReducer;
 export const {
     setToken,
     setUsers,
-    clearLocalStorage,
 } = authSlice.actions
