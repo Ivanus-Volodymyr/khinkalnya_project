@@ -35,6 +35,7 @@ export const errorInterceptor = (axiosInstance: any) => {
 
             return axiosServices(originalConfig)
         }
+        return error.response;
     });
 };
 

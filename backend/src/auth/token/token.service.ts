@@ -42,7 +42,7 @@ export class TokenService {
     };
   }
 
-  async deleteTokenPair(id: number):Promise<TokenPair> {
+  async deleteTokenPair(id: number): Promise<TokenPair> {
     return this.prismaService.tokenPair.delete({ where: { authorId: id } });
   }
 

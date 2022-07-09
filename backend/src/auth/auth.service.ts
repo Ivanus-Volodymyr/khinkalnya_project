@@ -1,4 +1,9 @@
-import {HttpException, HttpStatus, Injectable, UnauthorizedException} from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { UserService } from '../user/user.service';
@@ -42,23 +47,37 @@ export class AuthService {
     try {
       const userFromDb = await this._validate(data);
 
-      if (userFromDb) {
-        const tokenPairFromDb = await this.tokenService.getTokenPairByUserId(userFromDb.id);
+      if (!userFromDb) {
+        throw new UnauthorizedException(
+          HttpStatus.UNAUTHORIZED,
+          'wrong email or password',
+        );
+      }
 
-       if (tokenPairFromDb){
-         await this.tokenService.deleteTokenPair(userFromDb.id);
-       }
+      if (userFromDb) {
+        const tokenPairFromDb = await this.tokenService.getTokenPairByUserId(
+          userFromDb.id,
+        );
+
+        if (tokenPairFromDb) {
+          await this.tokenService.deleteTokenPair(userFromDb.id);
+        }
 
         return this.tokenService.generateToken(userFromDb);
       }
     } catch (e) {
-      console.log(e);
+      throw new HttpException(e.message, 404);
     }
   }
 
   private async _validate(data: LoginUserDto) {
     try {
       const userFromDb = await this.userService.getByEmail(data.email);
+
+      if (userFromDb === null) {
+        throw new HttpException('wrong email or password', 404);
+      }
+
       const checkPassword = await bcrypt.compare(
         data.password,
         userFromDb.password,
@@ -67,8 +86,10 @@ export class AuthService {
       if (userFromDb && checkPassword) {
         return userFromDb;
       }
+
+      throw new HttpException('wrong email or password', 404);
     } catch (e) {
-      console.log('wrong');
+      throw new HttpException(e.message, 404);
     }
   }
 
@@ -93,18 +114,24 @@ export class AuthService {
     }
   }
 
-    async logout(accessToken: string) {
-        try {
-          const tokenPayload = await this.tokenService.verifyToken(accessToken, 'ACCESS');
-          console.log(tokenPayload);
+  async logout(accessToken: string) {
+    try {
+      const tokenPayload = await this.tokenService.verifyToken(
+        accessToken,
+        'ACCESS',
+      );
+      console.log(tokenPayload);
 
-          if (!tokenPayload) {
-            throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, 'access token not valid')
-          }
+      if (!tokenPayload) {
+        throw new UnauthorizedException(
+          HttpStatus.UNAUTHORIZED,
+          'access token not valid',
+        );
+      }
 
-          return this.tokenService.deleteTokenPair(tokenPayload.id);
-        } catch (e) {
-          console.log(e);
-        }
+      return this.tokenService.deleteTokenPair(tokenPayload.id);
+    } catch (e) {
+      console.log(e);
     }
+  }
 }

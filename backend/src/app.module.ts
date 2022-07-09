@@ -6,9 +6,10 @@ import { UserModule } from './user/user.module';
 import { AccessTokenMiddleware } from './auth/middlewares/access_token-middleware';
 import { TokenService } from './auth/token/token.service';
 import { PrismaService } from './core/prisma.service';
+import { FileModule } from './file/file.module';
 
 @Module({
-  imports: [AuthModule, UserModule, JwtModule],
+  imports: [AuthModule, UserModule, JwtModule, FileModule],
   controllers: [],
   providers: [TokenService, PrismaService, JwtService],
 })

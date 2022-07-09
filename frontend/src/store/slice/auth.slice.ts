@@ -7,6 +7,7 @@ import {IInitialState} from "../../interfaces/initial.state.interface";
 
 const initialState: IInitialState = {
     access_token: '',
+    error: '',
     active: false,
     user: null,
     tokenPair: {} as ITokenPair,
@@ -48,6 +49,10 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setToken: (state, action: any) => {
+            console.log(action.payload.message);
+            if (action.payload.statusCode === 404) {
+                state.error = action.payload.message
+            }
             const access_token = action.payload.tokenPair.access_token
             const {role} = decodeToken(access_token) as string | any;
             localStorage.setItem('role', role);
@@ -71,7 +76,7 @@ const authSlice = createSlice({
             console.log('-----------------');
             // state.users = action.payload
         },
-       
+
     }
 });
 

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {useForm} from "react-hook-form";
 
 import {IUser} from "../../../interfaces";
@@ -7,7 +7,15 @@ import {loginUser} from "../../../store";
 import {useNavigate} from "react-router-dom";
 
 const UserLogin: FC = () => {
-    const {active} = useAppSelector(state => state.authReducer);
+    const {active, error} = useAppSelector(state => state.authReducer);
+    let int = false;
+
+    useEffect(() => {
+        if (error !== '') {
+            int = true
+        }
+
+    }, [error, int])
     const dispatch = useAppDispatch();
     const {register, handleSubmit, reset,} = useForm();
     const navigate = useNavigate();
@@ -40,6 +48,7 @@ const UserLogin: FC = () => {
                     <button>Login</button>
                 </div>
             </form>
+            <div>{int && <div>{error}</div>}</div>
         </div>
     );
 };
