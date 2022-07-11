@@ -7,9 +7,10 @@ import { AccessTokenMiddleware } from './auth/middlewares/access_token-middlewar
 import { TokenService } from './auth/token/token.service';
 import { PrismaService } from './core/prisma.service';
 import { FileModule } from './file/file.module';
+import { RestaurantModule } from './restaurant/restaurant.module';
 
 @Module({
-  imports: [AuthModule, UserModule, JwtModule, FileModule],
+  imports: [AuthModule, UserModule, JwtModule, FileModule, RestaurantModule],
   controllers: [],
   providers: [TokenService, PrismaService, JwtService],
 })

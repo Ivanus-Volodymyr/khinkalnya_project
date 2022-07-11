@@ -30,7 +30,6 @@ export class FileService {
       }).promise();
       // promise() must have!!!!!!!!.....;
 
-      // console.log(bucketUpload);
       return bucketUpload;
     } catch (e) {
       console.log(e);
