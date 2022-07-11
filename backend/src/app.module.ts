@@ -8,9 +8,21 @@ import { TokenService } from './auth/token/token.service';
 import { PrismaService } from './core/prisma.service';
 import { FileModule } from './file/file.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
+import { LocalityModule } from './locality/locality.module';
+import { DishModule } from './dish/dish.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
-  imports: [AuthModule, UserModule, JwtModule, FileModule, RestaurantModule],
+  imports: [
+    AuthModule,
+    UserModule,
+    JwtModule,
+    FileModule,
+    RestaurantModule,
+    LocalityModule,
+    DishModule,
+    OrderModule,
+  ],
   controllers: [],
   providers: [TokenService, PrismaService, JwtService],
 })

@@ -42,7 +42,7 @@ export class FileService {
         .fill(null)
         .map(() => Math.round(Math.random() * 16).toString(16))
         .join('');
-      return `avatar/${randomName}${fileName}`;
+      return `khinkalnya/${randomName}${fileName}`;
     } catch (e) {
       console.log(e);
     }

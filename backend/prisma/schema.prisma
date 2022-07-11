@@ -49,10 +49,11 @@ model Order {
 model Dish {
   id            Int           @id @default(autoincrement())
   name          String
+  image         String?
   price         Int
   weight        Int?
   description   String
-  quantity_sold Int
+  quantity_sold Int?          @default(0)
   locality      Locality?     @relation(fields: [localityId], references: [id])
   localityId    Int?
   ingredients   Ingredients[]
