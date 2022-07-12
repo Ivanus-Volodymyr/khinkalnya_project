@@ -9,7 +9,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Dish } from '@prisma/client';
 
 import { DishService } from './dish.service';
-
 @Controller('dish')
 export class DishController {
   constructor(private dishService: DishService) {}
@@ -17,6 +16,6 @@ export class DishController {
   @Post()
   @UseInterceptors(FileInterceptor('image'))
   create(@UploadedFile() file, @Body() data: Dish) {
-    return this.dishService.create(file, data);
+    return this.dishService.create(data, file);
   }
 }
