@@ -11,6 +11,7 @@ import { RestaurantModule } from './restaurant/restaurant.module';
 import { LocalityModule } from './locality/locality.module';
 import { DishModule } from './dish/dish.module';
 import { OrderModule } from './order/order.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { OrderModule } from './order/order.module';
     LocalityModule,
     DishModule,
     OrderModule,
+    ReviewModule,
   ],
   controllers: [],
   providers: [TokenService, PrismaService, JwtService],
