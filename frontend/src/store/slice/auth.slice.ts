@@ -49,7 +49,6 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setToken: (state, action: any) => {
-            console.log(action.payload.message);
             if (action.payload.statusCode === 404) {
                 state.error = action.payload.message
             }
@@ -64,8 +63,6 @@ const authSlice = createSlice({
             localStorage.setItem('refresh_token', action.payload.tokenPair.refresh_token);
 
             state.active = true;
-
-            window.dispatchEvent(new Event("storage"));
 
             state.user = action.payload.user;
             state.tokenPair = action.payload.tokenPair as ITokenPair;

@@ -3,13 +3,31 @@ import { Locality } from '@prisma/client';
 
 import { PrismaService } from '../core/prisma.service';
 import { CreateLocalityDto } from './dto/create-locality-dto';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class LocalityService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private fileService: FileService,
+  ) {}
 
-  public async create(data: CreateLocalityDto): Promise<Locality> {
-    return this.prismaService.locality.create({ data });
+  public async create(locality: CreateLocalityDto, file): Promise<Locality> {
+    try {
+      if (file) {
+        const img = await this.fileService.uploadFile(file);
+        return this.prismaService.locality.create({
+          data: {
+            ...locality,
+            image: img.Location,
+          },
+        });
+      }
+
+      return this.prismaService.locality.create({ data: locality });
+    } catch (e) {
+      throw new HttpException(e.message, 404);
+    }
   }
 
   public async getAll(): Promise<Locality[]> {
@@ -23,7 +41,8 @@ export class LocalityService {
   }
 
   public async updateById(
-    data: CreateLocalityDto,
+    file,
+    localityData: CreateLocalityDto,
     id: string,
   ): Promise<Locality> {
     try {
@@ -32,9 +51,21 @@ export class LocalityService {
         throw new HttpException(`No such locality with id ${id}`, 404);
       }
 
+      if (file) {
+        const img = await this.fileService.uploadFile(file);
+
+        return this.prismaService.locality.update({
+          where: { id: Number(id) },
+          data: {
+            ...localityData,
+            image: img.Location,
+          },
+        });
+      }
+
       return this.prismaService.locality.update({
         where: { id: Number(id) },
-        data: data,
+        data: localityData,
       });
     } catch (e) {
       throw new HttpException(e.message, 404);

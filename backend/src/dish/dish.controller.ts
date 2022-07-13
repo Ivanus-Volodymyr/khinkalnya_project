@@ -40,7 +40,11 @@ export class DishController {
 
   @Put('/:id')
   @UseInterceptors(FileInterceptor('image'))
-  updateById(@UploadedFile() file, @Body() dish: Partial<Dish>, @Param('id') id: string) {
+  updateById(
+    @UploadedFile() file,
+    @Body() dish: Partial<Dish>,
+    @Param('id') id: string,
+  ) {
     return this.dishService.updateById(dish, id, file);
   }
 

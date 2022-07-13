@@ -55,14 +55,18 @@ export class DishService {
     });
   }
 
-  public async updateById(dish: Partial<Dish>, id: string, file): Promise<Dish> {
+  public async updateById(
+    dish: Partial<Dish>,
+    id: string,
+    file,
+  ): Promise<Dish> {
     try {
       const locality = await this.getById(id);
       if (locality === null) {
         throw new HttpException(`no such locality with id ${id}`, 404);
       }
 
-      if (file){
+      if (file) {
         const img = await this.fileService.uploadFile(file);
 
         return this.prismaService.dish.update({
@@ -87,7 +91,6 @@ export class DishService {
           localityId: Number(dish.localityId),
           restaurantId: Number(dish.restaurantId),
         },
-
       });
     } catch (e) {
       throw new HttpException(e.message, 404);

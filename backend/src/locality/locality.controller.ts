@@ -6,17 +6,21 @@ import {
   Param,
   Post,
   Put,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { LocalityService } from './locality.service';
 import { CreateLocalityDto } from './dto/create-locality-dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('locality')
 export class LocalityController {
   constructor(private localityService: LocalityService) {}
 
   @Post()
-  create(@Body() data: CreateLocalityDto) {
-    return this.localityService.create(data);
+  @UseInterceptors(FileInterceptor('image'))
+  create(@UploadedFile() file, @Body() data: CreateLocalityDto) {
+    return this.localityService.create(data, file);
   }
 
   @Get()
@@ -25,8 +29,13 @@ export class LocalityController {
   }
 
   @Put('/:id')
-  updateById(@Param('id') id: string, @Body() data: CreateLocalityDto) {
-    return this.localityService.updateById(data, id);
+  @UseInterceptors(FileInterceptor('image'))
+  updateById(
+    @UploadedFile() file,
+    @Param('id') id: string,
+    @Body() data: CreateLocalityDto,
+  ) {
+    return this.localityService.updateById(file, data, id);
   }
 
   @Delete('/:id')

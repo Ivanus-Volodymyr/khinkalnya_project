@@ -64,9 +64,10 @@ model Dish {
 }
 
 model Locality {
-  id   Int    @id @default(autoincrement())
-  name String
-  dish Dish[]
+  id    Int     @id @default(autoincrement())
+  image String?
+  name  String
+  dish  Dish[]
 }
 
 model Ingredients {
