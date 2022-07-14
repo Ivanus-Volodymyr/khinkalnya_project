@@ -7,8 +7,10 @@ import {IInitialState} from "../../interfaces/initial.state.interface";
 
 const initialState: IInitialState = {
     access_token: '',
+    status: '',
     error: '',
     active: false,
+    users: [] as IUser[],
     user: null,
     tokenPair: {} as ITokenPair,
     refresh_token: '',
@@ -38,10 +40,15 @@ export const logoutUser = createAsyncThunk(
 )
 
 export const getAll = createAsyncThunk(
-    'auth/user',
-    async (_, {dispatch}) => {
-        const response = await userService.getAllUsers();
-        dispatch(setUsers(response.data))
+    'auth/users',
+    async (_, {rejectWithValue}) => {
+        try {
+            const {data} = await userService.getAllUsers();
+            return data;
+        } catch (e) {
+            return rejectWithValue(e)
+        }
+
     });
 
 const authSlice = createSlice({
@@ -53,7 +60,7 @@ const authSlice = createSlice({
                 state.error = action.payload.message
             }
             const access_token = action.payload.tokenPair.access_token
-            const {role} = decodeToken(access_token) as string | any;
+            const {role, id} = decodeToken(access_token) as string | any;
             localStorage.setItem('role', role);
 
             state.access_token = action.payload.tokenPair.access_token;
@@ -61,19 +68,24 @@ const authSlice = createSlice({
 
             localStorage.setItem('access_token', action.payload.tokenPair.access_token);
             localStorage.setItem('refresh_token', action.payload.tokenPair.refresh_token);
+            localStorage.setItem('userId', id);
 
             state.active = true;
 
             state.user = action.payload.user;
             state.tokenPair = action.payload.tokenPair as ITokenPair;
         },
-        setUsers: (state, action: any) => {
-            console.log('-----------------');
-            console.log(action.payload);
-            console.log('-----------------');
-            // state.users = action.payload
-        },
 
+    },
+    extraReducers: (builder) => {
+        builder.addCase(getAll.pending, (state) => {
+            state.status = 'pending';
+        })
+
+        builder.addCase(getAll.fulfilled, (state, action) => {
+            state.users = action.payload;
+            state.status = 'fulfilled';
+        })
     }
 });
 
@@ -82,5 +94,4 @@ export default authReducer;
 
 export const {
     setToken,
-    setUsers,
 } = authSlice.actions

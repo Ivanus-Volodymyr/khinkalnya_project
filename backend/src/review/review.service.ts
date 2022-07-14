@@ -1,4 +1,4 @@
-import {HttpException, Injectable} from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Review } from '@prisma/client';
 import { PrismaService } from '../core/prisma.service';
 
@@ -29,22 +29,38 @@ export class ReviewService {
     });
   }
 
-  public async updateById(review:Partial<Review>, id: string): Promise<Review> {
-      try {
-          const review = await this.getById(id);
-          if (review === null) {
-              throw new HttpException(`No such review with id ${id}`, 404)
-          }
-
-          return this.prismaService.review.update({
-              where: {id: Number(id)},
-              data: {
-                  ...review,
-                  rating: Number(review.rating)
-              }
-          })
-      } catch (e) {
-          throw new HttpException(e.message, 404)
+  public async updateById(
+    review: Partial<Review>,
+    id: string,
+  ): Promise<Review> {
+    try {
+      const review = await this.getById(id);
+      if (review === null) {
+        throw new HttpException(`No such review with id ${id}`, 404);
       }
+
+      return this.prismaService.review.update({
+        where: { id: Number(id) },
+        data: {
+          ...review,
+          rating: Number(review.rating),
+        },
+      });
+    } catch (e) {
+      throw new HttpException(e.message, 404);
+    }
+  }
+
+  public async deleteById(id: string): Promise<Review> {
+    try {
+      const review = await this.getById(id);
+      if (review === null) {
+        throw new HttpException(`No such review with id ${id}`, 404);
+      }
+
+      return this.prismaService.review.delete({ where: { id: Number(id) } });
+    } catch (e) {
+      throw new HttpException(e.message, 404);
+    }
   }
 }
