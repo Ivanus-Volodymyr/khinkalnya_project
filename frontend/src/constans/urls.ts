@@ -8,4 +8,5 @@ export const urls = {
     refresh: 'auth/refresh',
     logout: 'auth/logout',
     getUsers: '/users',
+    getLocality: '/locality',
 }

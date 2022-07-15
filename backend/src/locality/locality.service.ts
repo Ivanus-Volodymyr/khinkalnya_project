@@ -31,7 +31,7 @@ export class LocalityService {
   }
 
   public async getAll(): Promise<Locality[]> {
-    return this.prismaService.locality.findMany();
+    return this.prismaService.locality.findMany({ include: { dish: true } });
   }
 
   public async getById(id: string): Promise<Locality> {

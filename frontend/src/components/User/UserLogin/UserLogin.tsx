@@ -5,6 +5,7 @@ import {IUser} from "../../../interfaces";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {loginUser} from "../../../store";
 import {useNavigate} from "react-router-dom";
+import CartBar from "../../CartBar/CartBar";
 
 const UserLogin: FC = () => {
     const {active, error} = useAppSelector(state => state.authReducer);
@@ -49,6 +50,8 @@ const UserLogin: FC = () => {
                 </div>
             </form>
             <div>{int && <div>{error}</div>}</div>
+
+            <CartBar/>
         </div>
     );
 };
