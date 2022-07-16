@@ -7,7 +7,7 @@ const initialState = {
     locality: [] as ILocality[],
 }
 
-export const getAll = createAsyncThunk(
+export const getAllLocality = createAsyncThunk(
     'locality/getAll',
     async (_, {rejectWithValue}) => {
         try {
@@ -25,7 +25,7 @@ const localitySlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(getAll.fulfilled, (state, action) => {
+        builder.addCase(getAllLocality.fulfilled, (state, action) => {
             if (action.payload) {
                 state.locality = action.payload
             }

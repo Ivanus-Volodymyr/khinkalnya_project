@@ -4,9 +4,11 @@ export default apiUrl;
 
 export const urls = {
     registration: '/auth/registration',
-    login:'auth/login',
+    login: 'auth/login',
     refresh: 'auth/refresh',
     logout: 'auth/logout',
     getUsers: '/users',
     getLocality: '/locality',
+    getOrders: '/orders'
+
 }

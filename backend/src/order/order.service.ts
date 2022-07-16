@@ -8,4 +8,8 @@ export class OrderService {
   public async create(order: any): Promise<Order> {
     return this.prismaService.order.create(order);
   }
+
+    public async getAll():Promise<Order[]> {
+        return this.prismaService.order.findMany()
+    }
 }
