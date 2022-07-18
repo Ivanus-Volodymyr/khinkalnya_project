@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Order } from '@prisma/client';
+
 import { PrismaService } from '../core/prisma.service';
 
 @Injectable()
@@ -9,7 +10,7 @@ export class OrderService {
     return this.prismaService.order.create(order);
   }
 
-    public async getAll():Promise<Order[]> {
-        return this.prismaService.order.findMany()
-    }
+  public async getAll(): Promise<Order[]> {
+    return this.prismaService.order.findMany();
+  }
 }
