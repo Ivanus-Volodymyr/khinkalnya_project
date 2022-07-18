@@ -22,6 +22,9 @@ export class CreateUserDto {
   @IsNotEmpty()
   public email: string;
 
+  @IsString()
+  public avatar?: string
+
   @IsNumber()
   public age: number;
 

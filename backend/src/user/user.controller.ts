@@ -1,6 +1,17 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 
 import { UserService } from './user.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateUserDto } from '../auth/dto/registration-user-dto';
+import {User} from "@prisma/client";
 
 @Controller('users')
 export class UserController {
@@ -15,5 +26,15 @@ export class UserController {
   @Get('/:id')
   getUserById(@Param('id') id: string) {
     return this.userService.getUserById(id);
+  }
+
+  @Put('/:id')
+  @UseInterceptors(FileInterceptor('avatar'))
+  updateUserById(
+    @UploadedFile() file,
+    @Body() user: Partial<User>,
+    @Param('id') id: string,
+  ) {
+    return this.userService.updateUserById(file, user, id);
   }
 }

@@ -8,6 +8,7 @@ import { PrismaService } from '../core/prisma.service';
 import { UserService } from '../user/user.service';
 import { TokenService } from './token/token.service';
 import { TokenModule } from './token/token.module';
+import { FileService } from '../file/file.service';
 
 @Module({
   providers: [
@@ -16,6 +17,7 @@ import { TokenModule } from './token/token.module';
     JwtService,
     UserService,
     TokenService,
+    FileService,
   ],
   controllers: [AuthController],
   imports: [UserModule, TokenModule],

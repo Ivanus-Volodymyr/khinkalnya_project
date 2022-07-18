@@ -30,6 +30,6 @@ import { ReviewModule } from './review/review.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
-    consumer.apply(AccessTokenMiddleware).forRoutes('users');
+    consumer.apply(AccessTokenMiddleware).forRoutes('posts');
   }
 }
