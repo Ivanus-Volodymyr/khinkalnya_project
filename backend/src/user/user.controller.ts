@@ -10,7 +10,6 @@ import {
 
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateUserDto } from '../auth/dto/registration-user-dto';
 import {User} from "@prisma/client";
 
 @Controller('users')
