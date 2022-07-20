@@ -3,7 +3,7 @@ import {userService} from "../../services";
 
 const Admin = () => {
     const id = localStorage.getItem('userId');
-    useEffect(()=>{
+    useEffect(() => {
         if (id) {
             userService.getUserById(id).then(value => console.log(value))
         }

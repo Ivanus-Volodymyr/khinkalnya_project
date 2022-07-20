@@ -2,15 +2,13 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {decodeToken} from "react-jwt";
 
 import {ITokenPair, IUser} from "../../interfaces";
-import {authService, userService} from "../../services";
+import {authService} from "../../services";
 import {IInitialState} from "../../interfaces/initial.state.interface";
 
 const initialState: IInitialState = {
     access_token: '',
-    status: '',
     error: '',
     active: false,
-    users: [] as IUser[],
     user: null,
     tokenPair: {} as ITokenPair,
     refresh_token: '',
@@ -39,17 +37,6 @@ export const logoutUser = createAsyncThunk(
     }
 )
 
-export const getAll = createAsyncThunk(
-    'auth/users',
-    async (_, {rejectWithValue}) => {
-        try {
-            const {data} = await userService.getAllUsers();
-            return data;
-        } catch (e) {
-            return rejectWithValue(e)
-        }
-
-    });
 
 const authSlice = createSlice({
     name: 'auth',
@@ -78,14 +65,7 @@ const authSlice = createSlice({
 
     },
     extraReducers: (builder) => {
-        builder.addCase(getAll.pending, (state) => {
-            state.status = 'pending';
-        })
 
-        builder.addCase(getAll.fulfilled, (state, action) => {
-            state.users = action.payload;
-            state.status = 'fulfilled';
-        })
     }
 });
 
