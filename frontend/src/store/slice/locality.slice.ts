@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
-import {localityService} from "../../services/locality.service";
+import {localityService} from "../../services";
 import {ILocality} from "../../interfaces/locality.interface";
 
 const initialState = {

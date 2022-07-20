@@ -3,7 +3,7 @@ import {Bar} from 'react-chartjs-2';
 import {CategoryScale} from 'chart.js';
 import Chart from 'chart.js/auto';
 import {useAppDispatch, useAppSelector} from "../../hooks";
-import {getAll} from "../../store/slice/locality.slice";
+import {getAllLocality} from "../../store";
 
 Chart.register(CategoryScale);
 
@@ -12,7 +12,7 @@ const CartBar = () => {
     const {locality} = useAppSelector(state => state.localityReducer);
     const dispatch = useAppDispatch();
     useEffect(() => {
-        dispatch(getAll())
+        dispatch(getAllLocality())
     }, [])
 
     const localityDishId = []

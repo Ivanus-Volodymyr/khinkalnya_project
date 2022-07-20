@@ -4,6 +4,7 @@ import { User } from '@prisma/client';
 import { CreateUserDto } from '../auth/dto/registration-user-dto';
 import { PrismaService } from '../core/prisma.service';
 import { FileService } from '../file/file.service';
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UserService {
@@ -38,6 +39,8 @@ export class UserService {
       if (userFromDb === null) {
         throw new HttpException(`user with id ${id} was not found in Db`, 404);
       }
+
+      const hashPassword = await bcrypt.hash(user.password, 10);
 
       if (file) {
         const img = await this.fileService.uploadFile(file);

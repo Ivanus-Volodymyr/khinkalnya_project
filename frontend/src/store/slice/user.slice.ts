@@ -6,10 +6,11 @@ import {IUser} from "../../interfaces";
 export const initialState = {
     users: [] as IUser[],
     status: '',
+    user: {} as IUser
 }
 
-export const getAll = createAsyncThunk(
-    'auth/users',
+export const getAllUsers = createAsyncThunk(
+    'users/all',
     async (_, {rejectWithValue}) => {
         try {
             const {data} = await userService.getAllUsers();
@@ -20,24 +21,42 @@ export const getAll = createAsyncThunk(
 
     });
 
+export const getUserById = createAsyncThunk(
+    'users/:id',
+    async (id: string, {rejectWithValue}) => {
+        try {
+            const {data} = await userService.getUserById(id);
+            return data;
+        } catch (e) {
+            rejectWithValue(e)
+        }
+    }
+)
+
 const userSlice = createSlice({
     name: 'users',
     initialState,
-    reducers:{},
+    reducers: {},
     extraReducers: builder => {
-        builder.addCase(getAll.pending, (state) => {
+        builder.addCase(getAllUsers.pending, (state) => {
             state.status = 'pending';
         })
 
-        builder.addCase(getAll.fulfilled, (state, action) => {
+        builder.addCase(getAllUsers.fulfilled, (state, action) => {
             state.users = action.payload;
             state.status = 'fulfilled';
+        })
+
+        builder.addCase(getUserById.pending, (state) => {
+            state.status = 'pending';
+        })
+
+        builder.addCase(getUserById.fulfilled, (state, action) => {
+
         })
     }
 });
 
 const userReducer = userSlice.reducer;
 export default userReducer;
-const {
-
-} = userSlice.actions;
+const {} = userSlice.actions;
