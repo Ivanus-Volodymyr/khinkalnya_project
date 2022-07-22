@@ -4,7 +4,7 @@ import { User } from '@prisma/client';
 import { CreateUserDto } from '../auth/dto/registration-user-dto';
 import { PrismaService } from '../core/prisma.service';
 import { FileService } from '../file/file.service';
-import * as bcrypt from "bcrypt";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -54,7 +54,7 @@ export class UserService {
         where: { id: Number(id) },
         data: {
           ...user,
-          age: Number(user.age)
+          age: Number(user.age),
         },
       });
     } catch (e) {

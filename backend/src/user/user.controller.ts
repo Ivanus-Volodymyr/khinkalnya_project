@@ -10,7 +10,7 @@ import {
 
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import {User} from "@prisma/client";
+import { User } from '@prisma/client';
 
 @Controller('users')
 export class UserController {

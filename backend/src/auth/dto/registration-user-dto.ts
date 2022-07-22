@@ -23,7 +23,7 @@ export class CreateUserDto {
   public email: string;
 
   @IsString()
-  public avatar?: string
+  public avatar?: string;
 
   @IsNumber()
   public age: number;
