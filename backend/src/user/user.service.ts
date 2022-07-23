@@ -46,7 +46,7 @@ export class UserService {
         const img = await this.fileService.uploadFile(file);
         return this.prismaService.user.update({
           where: { id: Number(id) },
-          data: { ...user, avatar: img.Location, age: Number(user.age) },
+          data: { ...user, avatar: img.Location, age: Number(user.age), password: hashPassword },
         });
       }
 
